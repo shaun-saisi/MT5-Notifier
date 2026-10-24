@@ -1,7 +1,5 @@
 """
-Central configuration.
-Phase 1-3 uses only public market data, so no token is required.
-Token will be needed later (Phase 4) when we place orders.
+Central configuration for MT5 forex AI agent.
 """
 
 import os
@@ -9,15 +7,29 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# --- Deriv authentication (not needed for Phase 1-3, kept for later) ---
-DERIV_API_TOKEN = os.environ.get("DERIV_API_TOKEN", "")
+# --- MT5 connection ---
+# Terminal already logged in (5057833335, MetaQuotes-Demo). No credentials here.
 
-# --- Deriv market settings ---
-SYMBOL = "R_100"            # Deriv symbol (R_10, R_25, R_75, R_100, etc.)
-CANDLE_COUNT = 10           # Number of candles to fetch
-GRANULARITY = 3600          # Seconds per candle (60=1min, 3600=1h, 14400=4h)
+# --- Top five forex pairs by volume ---
+SYMBOLS = ["EURUSD", "USDJPY", "GBPUSD", "USDCAD", "AUDUSD"]
 
-# --- Ollama (local LLM) settings ---
+# --- Timeframes ---
+CANDLE_COUNT = 20
+
+# --- AI scoring threshold ---
+MIN_SCORE = 70
+
+# --- Liquidity window (Kenya time, EAT, UTC+3) ---
+LIQUIDITY_START_HOUR = 16
+LIQUIDITY_END_HOUR = 20
+
+# --- Position sizing ---
+LOT_SIZE = 0.01
+
+# --- Holding period ---
+MIN_HOLD_DAYS = 3
+
+# --- Ollama settings ---
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "llama3"     # Must be pulled with: ollama pull llama3
-OLLAMA_TIMEOUT = 120        # Seconds before giving up on a request
+OLLAMA_MODEL = "llama3.2:1b"    # smaller, faster; switch back to "llama3" if you have a strong GPU
+OLLAMA_TIMEOUT = 600
